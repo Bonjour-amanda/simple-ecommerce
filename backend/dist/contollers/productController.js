@@ -59,9 +59,7 @@ const getProduct = (request, h) => __awaiter(void 0, void 0, void 0, function* (
 exports.getProduct = getProduct;
 // Create a new product
 const createProduct = (request, h) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check if it's an object after ensuring the correct format
     if (typeof request.payload === 'string') {
-        // Try to parse the JSON string if it’s still a string
         try {
             request.payload = JSON.parse(request.payload);
         }
@@ -94,9 +92,7 @@ const createProduct = (request, h) => __awaiter(void 0, void 0, void 0, function
 exports.createProduct = createProduct;
 // Update an existing product
 const updateProduct = (request, h) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check if it's an object after ensuring the correct format
     if (typeof request.payload === 'string') {
-        // Try to parse the JSON string if it’s still a string
         try {
             request.payload = JSON.parse(request.payload);
         }

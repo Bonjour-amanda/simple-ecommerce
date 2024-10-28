@@ -14,7 +14,13 @@ const products_1 = require("./routes/products");
 const adjustments_1 = require("./routes/adjustments");
 const server = new hapi_1.Server({
     port: 3000,
-    host: 'localhost'
+    host: 'localhost',
+    routes: {
+        cors: {
+            origin: ['*'], // Allow all origins or specify your frontend URL
+            credentials: true // Allow credentials (cookies, authorization headers, etc.)
+        }
+    }
 });
 const init = () => __awaiter(void 0, void 0, void 0, function* () {
     (0, products_1.productRoutes)(server); // Register routes here
