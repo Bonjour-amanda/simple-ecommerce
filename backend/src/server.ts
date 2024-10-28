@@ -1,34 +1,22 @@
-import Hapi from '@hapi/hapi';
-import Inert from '@hapi/inert';
-import dotenv from 'dotenv';
+import { Server } from '@hapi/hapi';
+import { productRoutes } from './routes/products';
 import { adjustmentRoutes } from './routes/adjustments';
-import db from './database'; // Adjust path as necessary
 
-dotenv.config();
+const server: Server = new Server({
+    port: 3000,
+    host: 'localhost'
+});
 
 const init = async () => {
-    const server = Hapi.Server({
-        port: process.env.PORT || 3002,
-        host: 'localhost'
-    });
-
-    // Register plugins
-    await server.register(Inert);
-
-    // Register routes
-    adjustmentRoutes(server);
-
-    // Start the server
+    productRoutes(server); // Register routes here
+    adjustmentRoutes(server)
     await server.start();
     console.log(`Server running on ${server.info.uri}`);
-
-    return server;
 };
 
 process.on('unhandledRejection', (err) => {
-    console.log(err);
+    console.error(err);
     process.exit(1);
 });
 
-// Export the server for testing purposes
-export const server = init();
+init();
