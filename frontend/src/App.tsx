@@ -1,32 +1,30 @@
-import React, { useState } from 'react';
-import ProductList from './components/ProductList';
-import ProductModal from './components/ProductModal';
-import useStore from './store/useStore';
-import { TProduct } from './types';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import ProductView from './components/ProductView';
+import AdjustmentView from './components/AdjustmentView';
 
 const App: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<TProduct | null>(null);
-  const setCurrentEditingProduct = useStore((state) => state.setCurrentEditingProduct);
-
-  const handleAddProduct = () => {
-      setEditingProduct(null);
-      setIsModalOpen(true);
-  };
-
-  const handleEditProduct = (product: TProduct) => {
-      setEditingProduct(product);
-      setCurrentEditingProduct(product);
-      setIsModalOpen(true);
-  };
-
-  return (
-      <div className="app">
-          <button onClick={handleAddProduct}>Add Product</button>
-          <ProductList onEditProduct={handleEditProduct} />
-          {isModalOpen && <ProductModal product={editingProduct} onClose={() => setIsModalOpen(false)} />}
-      </div>
-  );
+    return (
+        <Router>
+            <div className="app">
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/products">Products</Link>
+                        </li>
+                        <li>
+                            <Link to="/adjustments">Adjustments</Link>
+                        </li>
+                    </ul>
+                </nav>
+                <Routes>
+                    <Route path="/products" element={<ProductView />} />
+                    <Route path="/adjustments" element={<AdjustmentView />} />
+                    <Route path="/" element={<ProductView />} />
+                </Routes>
+            </div>
+        </Router>
+    );
 };
 
 export default App;

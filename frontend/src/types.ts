@@ -7,6 +7,8 @@ export type TProduct = {
 }
 
 export type TAdjustment = {
+    id: number;
     sku: string;
     qty: number;
+    amount?: string;
 }

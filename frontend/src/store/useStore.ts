@@ -13,8 +13,12 @@ type TUseStore = {
     addProduct: (product: TProduct) => Promise<void>;
     updateProduct: (sku: string, updatedProduct: Partial<TProduct>) => Promise<void>;
     deleteProduct: (sku: string) => Promise<void>;
-    fetchAdjustments: (params: any) => Promise<void>;
-    addAdjustment: (adjustment: TAdjustment) => void;
+    fetchAdjustments: (page: number, limit: number) => Promise<void>;
+    addAdjustment: (adjustment: TAdjustment) => Promise<void>;
+    updateAdjustment: (id: number, updatedAdjustment: Partial<TAdjustment>) => Promise<void>;
+    deleteAdjustment: (id: number) => Promise<void>;
+    setCurrentEditingAdjustment: (adjustment: TAdjustment | null) => void;
+    currentEditingAdjustment: TAdjustment | null;
 };
 
 const defaultState = {
@@ -23,6 +27,7 @@ const defaultState = {
     currentEditingProduct: null,
     currentPage: 1,
     hasMore: true,
+    currentEditingAdjustment: null,
 };
 
 const useStore = create<TUseStore>(set => ({
@@ -38,15 +43,6 @@ const useStore = create<TUseStore>(set => ({
             }));
         } catch (error) {
             console.error('Failed to fetch products:', error);
-        }
-    },
-
-    fetchAdjustments: async (params) => {
-        try {
-            const response = await axios.get(`http://localhost:3000/adjustments?${params}`); // Update API endpoint as needed
-            set({ adjustments: response.data });
-        } catch (error) {
-            console.error('Failed to fetch adjustments:', error);
         }
     },
 
@@ -85,10 +81,58 @@ const useStore = create<TUseStore>(set => ({
         }
     },
 
-    addAdjustment: (adjustment) => set(state => ({
-        adjustments: [...state.adjustments, adjustment]
-    })),
     setCurrentEditingProduct: (product: TProduct | null) => set({ currentEditingProduct: product }),// Set current editing product
+
+    fetchAdjustments: async (page, limit) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/adjustments?page=${page}&limit=${limit}`); // Update API endpoint as needed
+            set(state => ({
+                adjustments: page === 1 ? response.data : [...state.adjustments, ...response.data],
+                currentPage: page,
+                hasMore: response.data.length === limit,
+            }));
+        } catch (error) {
+            console.error('Failed to fetch adjustments:', error);
+        }
+    },
+
+    addAdjustment: async (adjustment) => {
+        try {
+            const response = await axios.post('http://localhost:3000/adjustments', adjustment);
+            set(state => ({
+                adjustments: [...state.adjustments, response.data]
+            }));
+        } catch (error) {
+            console.error('Failed to add adjustment:', error);
+        }
+    },
+
+    updateAdjustment: async (id, updatedAdjustment) => {
+        try {
+            const response = await axios.put(`http://localhost:3000/adjustments/${id}`, updatedAdjustment);
+            set(state => ({
+                adjustments: state.adjustments.map(adjustment =>
+                    adjustment.id === id ? { ...adjustment, ...response.data } : adjustment
+                )
+            }));
+        } catch (error) {
+            console.error('Failed to update adjustment:', error);
+        }
+    },
+
+    deleteAdjustment: async (id) => {
+        try {
+            await axios.delete(`http://localhost:3000/adjustments/${id}`);
+            set(state => ({
+                adjustments: state.adjustments.filter(adj => adj.id !== id)
+            }));
+        } catch (error) {
+            console.error('Failed to delete adjustment:', error);
+        }
+    },
+
+    setCurrentEditingAdjustment: (adjustment: TAdjustment | null) => set({ currentEditingAdjustment: adjustment }),// Set current editing adjustment
+   
 }));
 
 export default useStore;
