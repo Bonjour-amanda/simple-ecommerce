@@ -21,12 +21,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
 
     return (
         <div className="product-card">
-            <a href="#" onClick={handleImageClick}>
-                {product.title}
-            </a>
+            <img 
+                src={product.image} 
+                alt={product.title} 
+                className="product-image" 
+                onClick={handleImageClick} 
+                style={{ width: '20%', height: 'auto' }}
+            />
             <h3>{product.title}</h3>
             <p>SKU: {product.sku}</p>
-            <p>Price: ${product.price.toFixed(2)}</p>
+            <p>Price: ${product.price}</p>
             <button onClick={() => onEdit(product)}>Edit</button>
             <button onClick={() => onDelete(product.sku)}>Delete</button>
             {isModalOpen && (

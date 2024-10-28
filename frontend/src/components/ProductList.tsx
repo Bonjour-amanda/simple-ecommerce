@@ -12,13 +12,14 @@ const ProductList = ({ onEditProduct }: TProductListProps) => {
     const products = useStore((state) => state.products);
     const fetchProducts = useStore((state) => state.fetchProducts);
     const deleteProduct = useStore((state) => state.deleteProduct);
-    const hasMore = products.length < 100;
+    const currentPage = useStore((state) => state.currentPage);
+    const hasMore = useStore((state) => state.hasMore);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
-            await fetchProducts();
+            await fetchProducts(1, 10); // Initial load with page 1 and limit 10
             setLoading(false);
         };
         loadProducts();
@@ -34,7 +35,7 @@ const ProductList = ({ onEditProduct }: TProductListProps) => {
 
     const fetchMoreProducts = async () => {
         setLoading(true);
-        await fetchProducts();
+        await fetchProducts(currentPage + 1, 10); // Fetch next page with limit 10
         setLoading(false);
     };
 
