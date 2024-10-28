@@ -1,36 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
 import db from '../database';
 
-// Get a list of adjustments with pagination
-// export const getAdjustments = async (request: Request, h: ResponseToolkit) => {
-//     const { page = 1, limit = 10 } = request.query;
-//     const offset = (page - 1) * limit;
-
-//     try {
-//         const adjustments = await db.any('SELECT * FROM adjustments ORDER BY id LIMIT $1 OFFSET $2', [limit, offset]);
-//         return h.response(adjustments).code(200);
-//     } catch (error) {
-//         console.error('Error fetching adjustments:', error);
-//         return h.response({ message: 'Internal Server Error' }).code(500);
-//     }
-// };
-
-// // Get a single adjustment by ID
-// export const getAdjustment = async (request: Request, h: ResponseToolkit) => {
-//     const { id } = request.params;
-
-//     try {
-//         const adjustment = await db.oneOrNone('SELECT * FROM adjustments WHERE id = $1', [id]);
-//         if (!adjustment) {
-//             return h.response({ message: 'Adjustment not found' }).code(404);
-//         }
-//         return h.response(adjustment).code(200);
-//     } catch (error) {
-//         console.error('Error fetching adjustment:', error);
-//         return h.response({ message: 'Internal Server Error' }).code(500);
-//     }
-// };
-
 // Get a list of adjustments with pagination, showing only sku, qty, and amount
 export const getAdjustments = async (request: Request, h: ResponseToolkit) => {
     const { page = 1, limit = 10 } = request.query;
@@ -70,7 +40,6 @@ export const getAdjustment = async (request: Request, h: ResponseToolkit) => {
 
 // Create a new adjustment
 export const createAdjustment = async (request: Request, h: ResponseToolkit) => {
-    // Check if request payload is a JSON string and parse if necessary
     if (typeof request.payload === 'string') {
         try {
             request.payload = JSON.parse(request.payload);
@@ -114,7 +83,6 @@ export const createAdjustment = async (request: Request, h: ResponseToolkit) => 
 // Update an existing adjustment
 export const updateAdjustment = async (request: Request, h: ResponseToolkit) => {
     
-    // Parse JSON payload if it’s a string
     if (typeof request.payload === 'string') {
         try {
             request.payload = JSON.parse(request.payload);

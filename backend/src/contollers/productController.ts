@@ -78,9 +78,7 @@ export const getProduct = async (request: Request, h: ResponseToolkit) => {
 // Create a new product
 export const createProduct = async (request: Request, h: ResponseToolkit) => {
     
-    // Check if it's an object after ensuring the correct format
     if (typeof request.payload === 'string') {
-        // Try to parse the JSON string if it’s still a string
         try {
             request.payload = JSON.parse(request.payload);
         } catch (error) {
@@ -119,9 +117,7 @@ export const createProduct = async (request: Request, h: ResponseToolkit) => {
 // Update an existing product
 export const updateProduct = async (request: Request, h: ResponseToolkit) => {
         
-    // Check if it's an object after ensuring the correct format
     if (typeof request.payload === 'string') {
-        // Try to parse the JSON string if it’s still a string
         try {
             request.payload = JSON.parse(request.payload);
         } catch (error) {
