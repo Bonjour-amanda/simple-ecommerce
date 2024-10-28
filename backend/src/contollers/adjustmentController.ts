@@ -8,7 +8,7 @@ export const getAdjustments = async (request: Request, h: ResponseToolkit) => {
 
     try {
         const adjustments = await db.any(
-            'SELECT product_sku as SKU, qty , amount FROM adjustments ORDER BY id LIMIT $1 OFFSET $2',
+            'SELECT id, product_sku as SKU, qty , amount FROM adjustments ORDER BY id LIMIT $1 OFFSET $2',
             [limit, offset]
         );
         return h.response(adjustments).code(200);

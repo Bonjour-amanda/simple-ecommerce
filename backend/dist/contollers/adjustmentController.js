@@ -19,7 +19,7 @@ const getAdjustments = (request, h) => __awaiter(void 0, void 0, void 0, functio
     const { page = 1, limit = 10 } = request.query;
     const offset = (page - 1) * limit;
     try {
-        const adjustments = yield database_1.default.any('SELECT product_sku as SKU, qty , amount FROM adjustments ORDER BY id LIMIT $1 OFFSET $2', [limit, offset]);
+        const adjustments = yield database_1.default.any('SELECT id, product_sku as SKU, qty , amount FROM adjustments ORDER BY id LIMIT $1 OFFSET $2', [limit, offset]);
         return h.response(adjustments).code(200);
     }
     catch (error) {
