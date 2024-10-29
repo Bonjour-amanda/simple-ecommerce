@@ -14,7 +14,7 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
 
     const [title, setTitle] = useState('');
     const [sku, setSku] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState<string[]>([]);
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [dragging, setDragging] = useState(false);
@@ -25,14 +25,14 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
         if (product) {
             setTitle(product.title);
             setSku(product.sku);
-            setImage(product.image);
+            setImage([...product.images]);
             setPrice(product.price);
             setDescription(product.description || '');
         } else {
             // Reset fields if there's no product to edit
             setTitle('');
             setSku('');
-            setImage('');
+            setImage([]);
             setPrice(0);
             setDescription('');
         }
@@ -43,7 +43,7 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImage(reader.result as string);
+                setImage([reader.result as string]);
             };
             reader.readAsDataURL(file);
         }
@@ -65,7 +65,7 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImage(reader.result as string);
+                setImage([reader.result as string]);
             };
             reader.readAsDataURL(file);
         }
@@ -77,7 +77,7 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const newProduct = { title, sku, image, price, description };
+        const newProduct = { title, sku, images: image, price, description };
         if (product) {
             updateProduct(product.sku, newProduct);
         } else {
@@ -105,8 +105,8 @@ const ProductModal = ({ onClose, product }: TProductModalProps) => {
                             onClick={handleDropAreaClick}
                         >
                             <input type="file" ref={fileInputRef} onChange={handleFileChange} />
-                            {image ? (
-                                <img src={image} alt="Product" className="preview-image" />
+                            {image?.length > 0 ? (
+                                <img src={image[0]} alt="Product" className="preview-image" />
                             ) : (
                                 <p>Drag & drop an image here, or click to select one</p>
                             )}

@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
     return (
         <div className="product-card">
             <img 
-                src={product.image} 
+                src={product?.images?.[0]} 
                 alt={product.title} 
                 className="product-image" 
                 onClick={handleImageClick} 
@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
             <button onClick={() => onEdit(product)}>Edit</button>
             <button onClick={() => onDelete(product.sku)}>Delete</button>
             {isModalOpen && (
-                <ImageModal imageUrl={product.image} onClose={handleCloseModal} />
+                <ImageModal imageUrl={product?.images[0]} onClose={handleCloseModal} />
             )}
         </div>
     );
