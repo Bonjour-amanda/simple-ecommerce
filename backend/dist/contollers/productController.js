@@ -22,7 +22,7 @@ const getProducts = (request, h) => __awaiter(void 0, void 0, void 0, function* 
         const products = yield database_1.default.any(`SELECT 
                 title, 
                 sku, 
-                (SELECT images[1] FROM products WHERE sku = p.sku) AS image, 
+                images, 
                 price, 
                 (SELECT COALESCE(SUM(qty), 0) FROM adjustments WHERE sku = p.sku) AS stock 
             FROM products p 
@@ -42,7 +42,7 @@ const getProduct = (request, h) => __awaiter(void 0, void 0, void 0, function* (
     const { sku } = request.params;
     try {
         const product = yield database_1.default.oneOrNone(`SELECT 
-                title, sku, images AS image, price, description, 
+                title, sku, images, price, description, 
                 (SELECT COALESCE(SUM(qty), 0) FROM adjustments WHERE product_id = p.id) AS stock 
              FROM products p
              WHERE sku = $1`, [sku]);

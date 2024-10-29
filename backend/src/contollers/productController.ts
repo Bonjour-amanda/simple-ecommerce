@@ -34,7 +34,7 @@ export const getProducts = async (request: Request, h: ResponseToolkit) => {
             `SELECT 
                 title, 
                 sku, 
-                (SELECT images[1] FROM products WHERE sku = p.sku) AS image, 
+                images, 
                 price, 
                 (SELECT COALESCE(SUM(qty), 0) FROM adjustments WHERE sku = p.sku) AS stock 
             FROM products p 
@@ -57,7 +57,7 @@ export const getProduct = async (request: Request, h: ResponseToolkit) => {
     try {
         const product = await db.oneOrNone(
             `SELECT 
-                title, sku, images AS image, price, description, 
+                title, sku, images, price, description, 
                 (SELECT COALESCE(SUM(qty), 0) FROM adjustments WHERE product_id = p.id) AS stock 
              FROM products p
              WHERE sku = $1`,
